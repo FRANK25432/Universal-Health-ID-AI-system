@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Doctor Dashboard</title>
+</head>
+<body>
+
+<h2>Patient Search</h2>
+
+<input id="healthId" placeholder="Enter Health ID">
+<button onclick="searchPatient()">Search</button>
+
+<pre id="result"></pre>
+
+<script>
+async function searchPatient() {
+  const id = document.getElementById("healthId").value;
+
+  const res = await fetch(`http://localhost:5000/api/doctor/patient/${id}`);
+  const data = await res.json();
+
+  document.getElementById("result").innerText =
+    JSON.stringify(data, null, 2);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard - AI Health ID</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f7fb;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 8px 0;
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .card {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eef5ff;
+      border-left: 5px solid #0077cc;
+      border-radius: 5px;
+    }
+
+    #pinSection {
+      display: none;
+      margin-top: 15px;
+    }
+
+    pre {
+      background: #111;
+      color: #0f0;
+      padding: 10px;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2> Doctor Dashboard - AI Universal Health ID</h2>
+
+  <!-- HEALTH ID INPUT -->
+  <input type="text" id="healthId" placeholder="Enter Health ID (e.g UHID-123456)">
+  <br>
+  <button onclick="loadPatient()">Continue</button>
+
+  <!-- PIN SECTION -->
+  <div id="pinSection">
+    <h3> Enter Patient PIN</h3>
+    <input type="password" id="pin" placeholder="Enter PIN">
+    <br>
+    <button onclick="verifyPin()">Verify & View Record</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="card">
+    <h3>Patient Data</h3>
+    <pre id="result">No data yet</pre>
+  </div>
+
+</div>
+
+<script>
+
+let healthId = "";
+
+// STEP 1: LOAD PATIENT
+window.loadPatient = function () {
+  
+  healthId = document.getElementById("healthId").value;
+  document.getElementById("pinSection").style.display = "block";
+
+  if (!healthId) {
+    alert("Enter Health ID");
+    return;
+  }
+
+  document.getElementById("pinSection").style.display = "block";
+}
+
+// STEP 2: VERIFY PIN
+window.verifyPin = async function () {
+  
+  console.log("Button clicked");
+  console.log("Health ID:", healthId);
+  console.log("PIN:", pin);
+
+  
+
+  const pin = document.getElementById("pin").value;
+
+  if (!pin) {
+    alert("Enter PIN");
+    return;
+  }
+
+  const response = await fetch(
+    `http://localhost:5000/api/patients/verify-pin/${healthId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ pin })
+    }
+  );
+
+  const data = await response.json();
+
+  if (data.success) {
+
+    document.getElementById("result").innerText =
+      JSON.stringify(data.medicalHistory, null, 2);
+
+  } else {
+    alert(data.message);
+  }
+}
+
+</script>
+
+</body>
+</html>
