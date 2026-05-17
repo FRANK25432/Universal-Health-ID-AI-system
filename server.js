@@ -32,6 +32,33 @@ app.use("/api/ocr", ocrRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/testai", testAiRoutes);
 
+// VERIFY PIN ROUTE
+app.post("/verify-pin", (req, res) => {
+
+    const { healthId, pin } = req.body;
+
+    console.log("Received:", healthId, pin);
+
+    // DEMO DATA
+    if (healthId === "UHID-582590" && pin === "1234") {
+
+        return res.json({
+            success: true,
+
+            patient: {
+                name: "John Doe",
+                age: 35,
+                bloodGroup: "O+",
+                condition: "Hypertension"
+            }
+        });
+    }
+
+    return res.status(401).json({
+        success: false,
+        message: "Invalid PIN or Health ID"
+    });
+});
 
 
 const PORT = process.env.PORT || 5000;

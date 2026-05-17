@@ -9,7 +9,7 @@ const {
 } = require("../controllers/patientController");
 
 router.post("/register", registerPatient);
-router.post("/verify-pin/:healthId", verifyPin);
+router.post("/verify-pin/:r", verifyPin);
 router.post("/history/:healthId", getPatientHistory);
 
 module.exports = router;
